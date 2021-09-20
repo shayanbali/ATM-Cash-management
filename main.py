@@ -1,5 +1,6 @@
 import matplotlib
 from utils import preprocess
+
 matplotlib.use("TkAgg")
 # from utils import preprocess, feature_engineer
 import pandas as pd
@@ -37,6 +38,15 @@ df = df_scaled.copy()
 X = df.loc[:, df.columns != 'amount']
 y = df.amount
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# Build neural network in Keras
+model = Sequential()
+model.add(Dense(128, activation='relu', input_dim=X_train.shape[1]))
+# model.add(BatchNormalization())
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(8, activation='relu'))
+model.add(Dense(1))
 
 print(df.loc[df['week'] == 'Friday', ['week']])
 print(df.head())

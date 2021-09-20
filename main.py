@@ -14,7 +14,7 @@ from sklearn.metrics import mean_squared_error
 
 try:
     print("Reading in the dataset. This will take some time...")
-    df = pd.read_csv('data_predictor.csv', nrows=361)
+    df = pd.read_csv('data_predictor.csv', nrows=1000000)
 except:
     print("""
       can not import dataset
@@ -24,6 +24,8 @@ except:
 # Preprocess data
 df = preprocess(df)
 
+print(df.loc[df['week'] == 'Friday', ['week']])
+print(df.head())
 # Scale the features
 df_prescaled = df.copy()
 df_scaled = df.drop(['amount'], axis=1)
@@ -42,11 +44,29 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 # Build neural network in Keras
 model = Sequential()
 model.add(Dense(128, activation='relu', input_dim=X_train.shape[1]))
-# model.add(BatchNormalization())
+model.add(BatchNormalization())
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
 model.add(Dense(8, activation='relu'))
+model.add(Dense(4, activation='relu'))
 model.add(Dense(1))
 
-print(df.loc[df['week'] == 'Friday', ['week']])
+# Compile model
+model.compile(loss='mse', optimizer='adam', metrics=['mse'])
+
+model.fit(X_train, y_train, epochs=1)
 print(df.head())
+print(X_train.shape[1])
+# Results
+train_pred = model.predict(X_train) * 100000000
+print(train_pred)
+print("------------------------------")
+train_rmse = np.sqrt(mean_squared_error(y_train, train_pred))
+test_pred = model.predict(X_test)
+test_rmse = np.sqrt(mean_squared_error(y_test, test_pred))
+print("Train RMSE: {:0.2f}".format(train_rmse))
+print("Test RMSE: {:0.2f}".format(test_rmse))
+print('------------------------')
+
+
+

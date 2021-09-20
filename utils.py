@@ -13,7 +13,6 @@ def preprocess(df):
     def change_friday(df):
         for ind in df.index:
             if df['week'][ind] == 'Friday':
-                print("a")
                 df['holiday'][ind] = 2
 
         return df
@@ -33,4 +32,5 @@ def preprocess(df):
     df = remove_amount_outliers(df, lower_bound=40000000, upper_bound=150000000)
     df = change_friday(df)
     df = day_to_num(df)
+    print(df.shape)
     return df

@@ -19,9 +19,6 @@ except:
       can not import dataset
       """)
     quit()
-for ind in df.index:
-    if df['week'][ind] == 'Friday':
-         print("a")
-         df ['holiday'][ind] = 3
+
 print(df.loc[df['week'] == 'Friday', ['week']])
 print(df.head())

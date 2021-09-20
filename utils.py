@@ -11,9 +11,10 @@ def preprocess(df):
 
     # change friday with  2
     def change_friday(df):
-        for ind in df['index']:
-            if df[ind]['week'] == 'friday':
-                df.at[ind]['holiday'] = 3
+        for ind in df.index:
+            if df['week'][ind] == 'Friday':
+                print("a")
+                df['holiday'][ind] = 2
 
     def day_to_num(df):
         df['week'] = df['week'].replace('Saturday', 0)

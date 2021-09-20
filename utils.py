@@ -5,8 +5,8 @@ def preprocess(df):
         return df
 
     # remove outliers in fare amount
-    def remove_fare_amount_outliers(df, lower_bound, upper_bound):
-        df = df[(df['amount'] > lower_bound) & (df['fare_amount'] <= upper_bound)]
+    def remove_amount_outliers(df, lower_bound, upper_bound):
+        df = df[(df['amount'] > lower_bound) & (df['amount'] <= upper_bound)]
         return df
 
     # change friday with  2
@@ -15,6 +15,8 @@ def preprocess(df):
             if df['week'][ind] == 'Friday':
                 print("a")
                 df['holiday'][ind] = 2
+
+        return df
 
     def day_to_num(df):
         df['week'] = df['week'].replace('Saturday', 0)
@@ -26,3 +28,9 @@ def preprocess(df):
         df['week'] = df['week'].replace('Friday', 6)
 
         return df
+
+    df = remove_missing_values(df)
+    df = remove_amount_outliers(df, lower_bound=40000000, upper_bound=150000000)
+    df = change_friday(df)
+    df = day_to_num(df)
+    return df

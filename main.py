@@ -1,5 +1,5 @@
 import matplotlib
-
+from utils import preprocess
 matplotlib.use("TkAgg")
 # from utils import preprocess, feature_engineer
 import pandas as pd
@@ -19,6 +19,9 @@ except:
       can not import dataset
       """)
     quit()
+
+df = preprocess(df)
+# Scale the features
 
 print(df.loc[df['week'] == 'Friday', ['week']])
 print(df.head())

@@ -22,6 +22,15 @@ except:
 
 df = preprocess(df)
 # Scale the features
+df_prescaled = df.copy()
+df_scaled = df.drop(['amount'], axis=1)
+df_scaled = scale(df_scaled)
+cols = df.columns.tolist()
+cols.remove('amount')
+df_scaled = pd.DataFrame(df_scaled, columns=cols, index=df.index)
+df_scaled = pd.concat([df_scaled, df['amount']], axis=1)
+df = df_scaled.copy()
+
 
 print(df.loc[df['week'] == 'Friday', ['week']])
 print(df.head())

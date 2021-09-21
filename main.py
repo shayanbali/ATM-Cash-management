@@ -56,7 +56,7 @@ model.add(Dense(1))
 # Compile model
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 
-model.fit(X_train, y_train, epochs=1500)
+model.fit(X_train, y_train, epochs=5000)
 print(df.head())
 print(X_train.shape[1])
 # Results

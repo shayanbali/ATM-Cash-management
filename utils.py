@@ -41,14 +41,28 @@ def preprocess(df):
     def add_avg(df):
         for ind in df.index:
             if ind - 7 < 0:
-                h = df.iloc[0:ind+1, 0].mean()
+                h = df.iloc[0:ind + 1, 0].mean()
             else:
-                h = df.iloc[ind - 7:ind+1, 0].mean()
-            print(h, ind - 7)
+                h = df.iloc[ind - 7:ind + 1, 0].mean()
+
             df['avg'][ind] = h
         return df
 
+    def add_season(df):
+        for ind in df.index:
+            if 0 < df['month'][ind] < 4:
+                df['season'][ind] = 1
+            elif 3 < df['month'][ind] < 7:
+                df['season'][ind] = 2
+            elif 6 < df['month'][ind] < 10:
+                df['season'][ind] = 3
+            else:
+                df['season'][ind] = 4
+
+        return df
+
     df = add_avg(df)
+    df = add_season(df)
     df = remove_missing_values(df)
     df = remove_amount_outliers(df, lower_bound=40000000, upper_bound=140000000)
     df = change_friday(df)

@@ -14,7 +14,7 @@ from sklearn.metrics import mean_squared_error
 
 try:
     print("Reading in the dataset. This will take some time...")
-    df = pd.read_csv('data_predictor.csv', nrows=1000000)
+    df = pd.read_csv('data_predictor2.csv', nrows=720)
 except:
     print("""
       can not import dataset
@@ -25,7 +25,8 @@ except:
 df = preprocess(df)
 
 print(df.loc[df['week'] == 'Friday', ['week']])
-print(df.head())
+print(df.head() )
+print("sdssdsd")
 # Scale the features
 df_prescaled = df.copy()
 df_scaled = df.drop(['amount'], axis=1)
@@ -43,12 +44,12 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 # Build neural network in Keras
 model = Sequential()
-model.add(Dense(128, activation='relu', input_dim=X_train.shape[1]))
-model.add(BatchNormalization())
-model.add(Dense(64, activation='relu'))
-model.add(Dense(32, activation='relu'))
-model.add(Dense(8, activation='relu'))
+model.add(Dense(4, activation='relu', input_dim=X_train.shape[1]))
+#model.add(BatchNormalization())
+#model.add(Dense(64, activation='relu'))
+#model.add(Dense(32, activation='relu'))
 model.add(Dense(4, activation='relu'))
+# model.add(Dense(4, activation='relu'))
 model.add(Dense(1))
 
 # Compile model
@@ -58,7 +59,7 @@ model.fit(X_train, y_train, epochs=1)
 print(df.head())
 print(X_train.shape[1])
 # Results
-train_pred = model.predict(X_train) * 100000000
+train_pred = model.predict(X_train)
 print(train_pred)
 print("------------------------------")
 train_rmse = np.sqrt(mean_squared_error(y_train, train_pred))
@@ -67,6 +68,24 @@ test_rmse = np.sqrt(mean_squared_error(y_test, test_pred))
 print("Train RMSE: {:0.2f}".format(train_rmse))
 print("Test RMSE: {:0.2f}".format(test_rmse))
 print('------------------------')
+
+
+def predict_random(df_prescaled, X_test, model):
+    sample = X_test.sample(n=1, random_state=np.random.randint(low=0, high=300))
+    idx = sample.index[0]
+
+    actual_fare = df_prescaled.loc[idx,'amount']
+    day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    day_of_week = day_names[df_prescaled.loc[idx,'week']]
+    predicted_fare = model.predict(sample)[0][0]
+    rmse = np.sqrt(np.square(predicted_fare-actual_fare))
+
+    print("Trip Details: {},".format(day_of_week))
+    print("Actual fare: ${:0.2f}".format(actual_fare))
+    print("Predicted fare: ${:0.2f}".format(predicted_fare))
+    print("RMSE: ${:0.2f}".format(rmse))
+
+predict_random(df_prescaled, X_test, model)
 
 
 

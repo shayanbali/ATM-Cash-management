@@ -46,17 +46,17 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 # Build neural network in Keras
 model = Sequential()
 model.add(Dense(128, activation='relu', input_dim=X_train.shape[1]))
-#model.add(BatchNormalization())
+model.add(BatchNormalization())
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
 model.add(Dense(8, activation='relu'))
-# model.add(Dense(4, activation='relu'))
+model.add(Dense(4, activation='relu'))
 model.add(Dense(1))
 
 # Compile model
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 
-model.fit(X_train, y_train, epochs=200)
+model.fit(X_train, y_train, epochs=1500)
 print(df.head())
 print(X_train.shape[1])
 # Results
@@ -78,10 +78,13 @@ def predict_random(df_prescaled, X_test, model):
     actual_fare = df_prescaled.loc[idx,'amount']
     day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     day_of_week = day_names[df_prescaled.loc[idx,'week']]
+    year = df_prescaled.loc[idx, 'year']
+    month = df_prescaled.loc[idx, 'month']
+    day = df_prescaled.loc[idx, 'day']
     predicted_fare = model.predict(sample)[0][0]
     rmse = np.sqrt(np.square(predicted_fare-actual_fare))
 
-    print("Trip Details: {},".format(day_of_week))
+    print("withdraw Details: {}, {}-{}-{}".format(day_of_week))
     print("Actual fare: ${:0.2f}".format(actual_fare))
     print("Predicted fare: ${:0.2f}".format(predicted_fare))
     print("RMSE: ${:0.2f}".format(rmse))

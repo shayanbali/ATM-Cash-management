@@ -50,7 +50,7 @@ def preprocess(df):
 
     df = add_avg(df)
     df = remove_missing_values(df)
-    df = remove_amount_outliers(df, lower_bound=40000000, upper_bound=150000000)
+    df = remove_amount_outliers(df, lower_bound=40000000, upper_bound=140000000)
     df = change_friday(df)
     df = day_to_num(df)
     df = add_one_holiday(df)

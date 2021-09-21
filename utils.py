@@ -44,7 +44,6 @@ def preprocess(df):
                 h = df.iloc[0:ind + 1, 0].mean()
             else:
                 h = df.iloc[ind - 7:ind + 1, 0].mean()
-
             df['avg'][ind] = h
         return df
 
@@ -61,13 +60,12 @@ def preprocess(df):
 
         return df
 
-
+    df = add_avg(df)
     df = add_season(df)
     df = remove_missing_values(df)
     df = remove_amount_outliers(df, lower_bound=40000000, upper_bound=140000000)
     df = change_friday(df)
     df = day_to_num(df)
     df = add_one_holiday(df)
-    df = add_avg(df)
     print(df.shape)
     return df

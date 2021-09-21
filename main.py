@@ -22,6 +22,7 @@ except:
     quit()
 
 # Preprocess data
+df_copy = df.copy()
 df = preprocess(df)
 
 print(df.loc[df['week'] == 'Friday', ['week']])
@@ -73,19 +74,19 @@ print('------------------------')
 
 
 def predict_random(df_prescaled, X_test, model):
-    sample = X_test.sample(n=1, random_state=np.random.randint(low=0, high=300))
+    sample = X_test.sample(n=1, random_state=np.random.randint(low=0, high=50))
     idx = sample.index[0]
 
     actual_fare = df_prescaled.loc[idx,'amount']
-    day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    day_of_week = day_names[df_prescaled.loc[idx,'week']]
+    day_names = ['Sunday', 'monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    day_of_week = df_copy.loc[idx, 'week']
     year = df_prescaled.loc[idx, 'year']
     month = df_prescaled.loc[idx, 'month']
     day = df_prescaled.loc[idx, 'day']
     predicted_fare = model.predict(sample)[0][0]
     rmse = np.sqrt(np.square(predicted_fare-actual_fare))
 
-    print("withdraw Details: {}, {}-{}-{}".format(day_of_week))
+    print("withdraw Details: {}, {}-{}-{}".format(day_of_week, year, month, day))
     print("Actual fare: ${:0.2f}".format(actual_fare))
     print("Predicted fare: ${:0.2f}".format(predicted_fare))
     print("RMSE: ${:0.2f}".format(rmse))

@@ -37,6 +37,7 @@ df_scaled = pd.DataFrame(df_scaled, columns=cols, index=df.index)
 df_scaled = pd.concat([df_scaled, df['amount']], axis=1)
 df = df_scaled.copy()
 
+
 # Split the dataframe into a training and testing set
 X = df.loc[:, df.columns != 'amount']
 y = df.amount
@@ -44,18 +45,18 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 # Build neural network in Keras
 model = Sequential()
-model.add(Dense(4, activation='relu', input_dim=X_train.shape[1]))
+model.add(Dense(128, activation='relu', input_dim=X_train.shape[1]))
 #model.add(BatchNormalization())
-#model.add(Dense(64, activation='relu'))
-#model.add(Dense(32, activation='relu'))
-model.add(Dense(4, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(8, activation='relu'))
 # model.add(Dense(4, activation='relu'))
 model.add(Dense(1))
 
 # Compile model
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 
-model.fit(X_train, y_train, epochs=1)
+model.fit(X_train, y_train, epochs=200)
 print(df.head())
 print(X_train.shape[1])
 # Results

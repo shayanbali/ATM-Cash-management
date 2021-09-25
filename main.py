@@ -47,11 +47,11 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 # Build neural network in Keras
 model = Sequential()
 #model.add(Dropout(0.2, input_shape=(X_train.shape[1],)))
-model.add(Dense(256, activation='relu', input_dim=X_train.shape[1]))
+model.add(Dense(128, activation='relu', input_dim=X_train.shape[1]))
 model.add(BatchNormalization())
-model.add(Dense(128, activation='relu'))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
+model.add(Dense(16, activation='relu'))
 model.add(Dense(8, activation='relu'))
 model.add(Dense(1))
 

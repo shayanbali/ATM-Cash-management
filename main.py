@@ -14,7 +14,7 @@ from sklearn.metrics import mean_squared_error
 
 try:
     print("Reading in the dataset. This will take some time...")
-    df = pd.read_csv('data_predictor2.csv', nrows=720)
+    df = pd.read_csv('data_predictor3.csv', nrows=720)
 except:
     print("""
       can not import dataset
@@ -22,6 +22,7 @@ except:
     quit()
 
 # Preprocess data
+avg = df['amount'].mean()
 df_copy = df.copy()
 df = preprocess(df)
 
@@ -46,19 +47,24 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 # Build neural network in Keras
 model = Sequential()
-#model.add(Dropout(0.2, input_shape=(X_train.shape[1],)))
-model.add(Dense(128, activation='relu', input_dim=X_train.shape[1]))
+# model.add(Dropout(0.1, input_shape=(X_train.shape[1],)))
+#model.add(BatchNormalization(input_shape=(X_train.shape[1],)))
+model.add(Dense(128, activation='relu'
+               , input_dim=X_train.shape[1]))
 model.add(BatchNormalization())
 model.add(Dense(64, activation='relu'))
 model.add(Dense(32, activation='relu'))
+#model.add(Dropout(0.2))
 model.add(Dense(16, activation='relu'))
-model.add(Dense(8, activation='relu'))
+#model.add(Dropout(0.2))
+model.add(Dense(4, activation='relu'))
+#model.add(Dropout(0.2))
 model.add(Dense(1))
 
 # Compile model
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 
-model.fit(X_train, y_train, epochs=5000)
+model.fit(X_train, y_train, epochs=5500)
 print(df.head())
 print(X_train.shape[1])
 # Results
@@ -90,6 +96,8 @@ def predict_random(df_prescaled, X_test, model):
     print("Actual fare: ${:0.2f}".format(actual_fare))
     print("Predicted fare: ${:0.2f}".format(predicted_fare))
     print("RMSE: ${:0.2f}".format(rmse))
+    print("Train average: ", df_prescaled['amount'].mean())
+    # print("Test average: ", y_test.mean())
 
 predict_random(df_prescaled, X_test, model)
 

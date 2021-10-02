@@ -3,6 +3,7 @@ def preprocess(df):
     def remove_missing_values(df):
         df = df.dropna()
 
+        df = df[(df['amount'] > 0)]
         for ind in df.index:
             if df['amount'][ind] == 0:
                 df.drop(ind)
@@ -40,10 +41,10 @@ def preprocess(df):
 
     def add_avg(df):
         for ind in df.index:
-            if ind - 14 < 0:
+            if ind - 7 < 0:
                 h = df.iloc[0:ind + 1, 0].mean()
             else:
-                h = df.iloc[ind - 14:ind + 1, 0].mean()
+                h = df.iloc[ind - 7:ind + 1, 0].mean()
             df['avg'][ind] = h
         return df
 
@@ -70,10 +71,13 @@ def preprocess(df):
 
         return df
 
+    print(df.shape, "     shape")
     df = add_avg(df)
     df = add_season(df)
     df = remove_missing_values(df)
-    df = remove_amount_outliers(df, lower_bound=15000000, upper_bound=75000000)
+    print(df.shape,"     shapeeeee")
+    df = remove_amount_outliers(df, lower_bound=40000000, upper_bound=150000000)
+    print(df.shape, "     shapee")
     df = change_friday(df)
     df = day_to_num(df)
     df = add_one_holiday(df)

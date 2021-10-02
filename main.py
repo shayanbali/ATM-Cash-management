@@ -14,7 +14,7 @@ from sklearn.metrics import mean_squared_error
 
 try:
     print("Reading in the dataset. This will take some time...")
-    df = pd.read_csv('data_predictor3.csv', nrows=720)
+    df = pd.read_csv('data_predictor2.csv', nrows=720)
 except:
     print("""
       can not import dataset
@@ -47,29 +47,32 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
 # Build neural network in Keras
 model = Sequential()
-# model.add(Dropout(0.1, input_shape=(X_train.shape[1],)))
+#model.add(Dropout(0.2, input_shape=(X_train.shape[1],)))
 #model.add(BatchNormalization(input_shape=(X_train.shape[1],)))
-model.add(Dense(128, activation='relu'
+model.add(Dense(1000, activation='relu'
                , input_dim=X_train.shape[1]))
 model.add(BatchNormalization())
-model.add(Dense(64, activation='relu'))
-model.add(Dense(32, activation='relu'))
+model.add(Dense(800, activation='relu'))
+model.add(Dense(400, activation='relu'))
 #model.add(Dropout(0.2))
-model.add(Dense(16, activation='relu'))
+#model.add(Dense(50, activation='relu'))
 #model.add(Dropout(0.2))
-model.add(Dense(4, activation='relu'))
+#model.add(Dense(8, activation='relu'))
 #model.add(Dropout(0.2))
 model.add(Dense(1))
 
+
+
+#32
 # Compile model
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 
-model.fit(X_train, y_train, epochs=5500)
+model.fit(X_train, y_train, epochs=5050)
 print(df.head())
 print(X_train.shape[1])
 # Results
 train_pred = model.predict(X_train)
-print(train_pred)
+
 print("------------------------------")
 train_rmse = np.sqrt(mean_squared_error(y_train, train_pred))
 test_pred = model.predict(X_test)

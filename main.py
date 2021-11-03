@@ -56,10 +56,17 @@ model.add(Dense(800, activation='relu'))
 model.add(Dense(400, activation='relu'))
 model.add(Dense(1))
 
+
 # Compile model
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 
 model.fit(X_train, y_train, epochs=5050)
+
+# getting layer's weights
+# for layer in model.layers:
+#     weights = layer.get_weights() # list of numpy arrays
+
+# shows part of our dataset after scaling and preprocessing
 print(df.head())
 print(X_train.shape[1])
 

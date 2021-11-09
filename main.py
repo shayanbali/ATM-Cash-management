@@ -1,3 +1,5 @@
+# author : Shayan Bali
+
 import matplotlib
 from utils import preprocess
 
@@ -68,7 +70,7 @@ model.add(Dense(1))
 # Compile model
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 
-model.fit(X_train, y_train, epochs=505)
+model.fit(X_train, y_train, epochs=5050)
 
 # getting layer's weights
 # for layer in model.layers:
@@ -108,8 +110,9 @@ def predict_random(df_prescaled, X_test, model):
     print("Predicted fare: ${:0.2f}".format(predicted_fare))
     print("RMSE: ${:0.2f}".format(rmse))
     print("Train average: ", df_prescaled['amount'].mean())
+    print("\n")
 
-
+# prediction function
 def prediction(df_prescaled, x, model):
     sample = x.tail(1)
     idx = sample.index[0]
@@ -124,9 +127,9 @@ def prediction(df_prescaled, x, model):
     rmse = np.sqrt(np.square(predicted_fare - actual_fare))
 
     print("withdraw Details: {}, {}-{}-{}".format(day_of_week, year, month, day))
-    print("Actual fare: ${:0.2f}".format(actual_fare))
+    #print("Actual fare: ${:0.2f}".format(actual_fare))
     print("Predicted fare: ${:0.2f}".format(predicted_fare))
-    print("RMSE: ${:0.2f}".format(rmse))
+    #print("RMSE: ${:0.2f}".format(rmse))
     print("Train average: ", df_prescaled['amount'].mean())
 
 

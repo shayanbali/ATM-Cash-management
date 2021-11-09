@@ -12,12 +12,21 @@ from keras.layers import Dense, Dropout
 from keras.layers import BatchNormalization
 from sklearn.metrics import mean_squared_error
 
-
 # Getting Data set
 try:
-    a = input("please enter file:")
+    a = input("please enter file : ")
     print("Reading in the dataset. This will take some time...")
     df = pd.read_csv(a, nrows=720)
+    print("Forecast day info \n")
+    year = input("year : ")
+    month = input("month : ")
+    day = input("day : ")
+    week = input("week (start with capital letter) : ")
+    typee = input("type of day (0-> Normal day 1-> Holiday 2-> Friday) : ")
+    dict = {'amount': df['amount'].mean(), 'year': int(year), 'month': int(month), 'day': int(day), 'week': week, 'holiday': int(typee), 'avg': 0, 'season': 0, 'before': 0, 'beginning': 0}
+
+    df = df.append(dict, ignore_index=True)
+
 except:
     print("""
       can not import dataset
@@ -56,11 +65,10 @@ model.add(Dense(800, activation='relu'))
 model.add(Dense(400, activation='relu'))
 model.add(Dense(1))
 
-
 # Compile model
 model.compile(loss='mse', optimizer='adam', metrics=['mse'])
 
-model.fit(X_train, y_train, epochs=5050)
+model.fit(X_train, y_train, epochs=505)
 
 # getting layer's weights
 # for layer in model.layers:
@@ -102,4 +110,25 @@ def predict_random(df_prescaled, X_test, model):
     print("Train average: ", df_prescaled['amount'].mean())
 
 
+def prediction(df_prescaled, x, model):
+    sample = x.tail(1)
+    idx = sample.index[0]
+
+    actual_fare = df_prescaled.loc[idx, 'amount']
+    day_names = ['Sunday', 'monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    day_of_week = df_copy.loc[idx, 'week']
+    year = df_prescaled.loc[idx, 'year']
+    month = df_prescaled.loc[idx, 'month']
+    day = df_prescaled.loc[idx, 'day']
+    predicted_fare = model.predict(sample)[0][0]
+    rmse = np.sqrt(np.square(predicted_fare - actual_fare))
+
+    print("withdraw Details: {}, {}-{}-{}".format(day_of_week, year, month, day))
+    print("Actual fare: ${:0.2f}".format(actual_fare))
+    print("Predicted fare: ${:0.2f}".format(predicted_fare))
+    print("RMSE: ${:0.2f}".format(rmse))
+    print("Train average: ", df_prescaled['amount'].mean())
+
+
 predict_random(df_prescaled, X_test, model)
+prediction(df_prescaled, X, model)
